@@ -3,6 +3,7 @@ const fs = require('fs');
 const axios = require('axios');
 const { ethers } = require('ethers');
 const { HttpsProxyAgent } = require('https-proxy-agent');
+const { SocksProxyAgent } = require('socks-proxy-agent');
 
 const colors = {
   reset: '\x1b[0m',
@@ -90,6 +91,11 @@ function createAxiosInstance(proxy = null) {
     }
     
     config.httpsAgent = new HttpsProxyAgent(proxyUrl);
+
+    if(proxy.startsWith('socks5://')) {
+      config.httpAgent = new SocksProxyAgent(proxyUrl);
+    }
+
     console.log(`${colors.cyan}ℹ️ Using proxy: ${proxy}${colors.reset}`);
   }
   
